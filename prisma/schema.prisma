@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Movie {
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  reviews Review[]
+  categories CategoryAssignment[]
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  category String
+  movies CategoryAssignment[]
+}
+
+model Review {
+  id Int @id @default(autoincrement())
+  review String
+  movie Movie @relation(fields: [movieId], references: [id])
+  movieId Int
+}
+
+model CategoryAssignment {
+  id Int @id @default(autoincrement())
+  movie Movie @relation(fields: [movieId], references: [id])
+  movieId Int
+  category Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+}
